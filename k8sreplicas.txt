@@ -1,0 +1,42 @@
+-----------------ReplicationController----------------------------
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: rc-1
+spec:
+  replicas: 3
+  selector:
+    env: dev
+  template:
+    metadata:
+      labels:
+        env: dev
+    spec:
+      containers:
+        - name: cont-1
+          image: nginx
+          ports:
+            - containerPort: 80
+
+----------------------ReplicaSet--------------------------------
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rs-1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: dev
+  template:
+    metadata:
+      labels:
+        env: dev
+    spec:
+      containers:
+        - name: mahe-1
+          image: nginx
+          ports:
+            - containerPort: 80
