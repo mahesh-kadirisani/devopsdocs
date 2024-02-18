@@ -19,7 +19,7 @@ export_line='export PATH=$PATH:/usr/local/bin'
 echo "$export_line" >> ~/.bashrc
 
 # Reload .bashrc to apply changes
-#source .bashrc
+source ~/.bashrc
 
 # Verify AWS CLI works after updating PATH
 aws --version
@@ -38,4 +38,7 @@ sudo mv kubectl /usr/local/bin/kubectl
 sudo mv kops-linux-amd64  /usr/local/bin/kops
 
 # Check versions of kubectl and kops
-kubectl version && kops version
+#kubectl version && kops version
+
+# Source .bashrc to apply changes to the current shell session
+source ~/.bashrc
