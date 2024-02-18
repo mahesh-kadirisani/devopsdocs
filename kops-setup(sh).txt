@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Download AWS CLI version 2
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+# Unzip the downloaded AWS CLI package
+unzip awscliv2.zip
+
+# Install AWS CLI
+sudo ./aws/install
+
+# Verify AWS CLI installation
+/usr/local/bin/aws --version
+
+# Define the export statement for PATH
+export_line='export PATH=$PATH:/usr/local/bin'
+
+# Append export statement to .bashrc
+echo "$export_line" >> ~/.bashrc
+
+# Reload .bashrc to apply changes
+source .bashrc
+
+# Verify AWS CLI works after updating PATH
+aws --version
+
+# Download kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+# Download kops
+wget https://github.com/kubernetes/kops/releases/download/v1.24.1/kops-linux-amd64
+
+# Make kubectl and kops executable
+chmod +x kops-linux-amd64 kubectl
+
+# Move kubectl and kops to /usr/local/bin
+sudo mv kubectl /usr/local/bin/kubectl
+sudo mv kops-linux-amd64  /usr/local/bin/kops
+
+# Check versions of kubectl and kops
+kubectl version && kops version
