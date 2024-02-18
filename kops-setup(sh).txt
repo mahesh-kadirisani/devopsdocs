@@ -19,7 +19,7 @@ export_line='export PATH=$PATH:/usr/local/bin'
 echo "$export_line" >> ~/.bashrc
 
 # Reload .bashrc to apply changes
-source .bashrc
+#source .bashrc
 
 # Verify AWS CLI works after updating PATH
 aws --version

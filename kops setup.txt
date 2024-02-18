@@ -20,6 +20,8 @@ STEP-5: CREATE INFRA SETUP
 		TO CREATE BUCKET: aws s3api create-bucket --bucket musta.k8s.local --region us-east-1
 		TO ENABLE VERSION: aws s3api put-bucket-versioning --bucket musta.k8s.local --region us-east-1 --versioning-configuration Status=Enabled
 		EXPORT CLUSTER DATA INTO BUCKET: export KOPS_STATE_STORE=s3://musta.k8s.local
+                Attach different S3 buckets to different clusters: kops create cluster --name=mycluster.example.com --state=s3://my-state-store --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-size=t2.medium
+                To attach Security groups with command: kops create cluster --name=mycluster.example.com --state=s3://my-state-store --zones=us-east-1a --node-count=3 --node-size=t2.medium --master-count=3 --master-size=t2.medium --node-security-groups=sg-XXXXXXXX --master-security-groups=sg-YYYYYYYY
 		GENERATE-KEY: ssh-keygen
 		TO CREATE CLUSTER: kops create cluster --name musta.k8s.local --zones us-east-1a --master-size t2.medium --node-size t2.micro
 		TO SEE THE CLUSTER: kops get cluster
