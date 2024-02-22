@@ -1,0 +1,150 @@
+---------------EmptyDirectory-----------------------------
+Example-1
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  labels:
+    env: dev
+spec:
+  volumes:
+    - name: vol-1
+      emptyDir: {}
+  containers:
+    - name: cont-1
+      image: ubuntu
+      ports:
+        - containerPort: 80
+      command: ["/bin/bash", "-c", "while true; do echo welcome mahe; sleep 5; done"]
+      volumeMounts:
+        - name: vol-1
+          mountPath: /mahe
+    - name: cont-2
+      image: centos
+      ports:
+        - containerPort: 80
+      command: ["/bin/bash", "-c", "while true; do echo welcome mahe; sleep 5; done"]
+      volumeMounts:
+        - name: vol-1
+          mountPath: /mahe1
+---------------------------------------
+Example-2
+------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  labels:
+    env: dev
+spec:
+  volumes:
+    - name: vol-1
+      emptyDir: {}
+  containers:
+    - name: cont-1
+      image: ubuntu
+      ports:
+        - containerPort: 80
+      command: ["tail", "-f", "/dev/null"]  # Keep the container running indefinitely
+      volumeMounts:
+        - name: vol-1
+          mountPath: /mahe
+    - name: cont-2
+      image: centos
+      ports:
+        - containerPort: 80
+      command: ["tail", "-f", "/dev/null"]  # Keep the container running indefinitely
+      volumeMounts:
+        - name: vol-1
+          mountPath: /mahe1
+----------------------------------------------------------------------------------------------------------------------------
+---------------------------------HostPath-----------------------------------------------------------------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-1
+  labels:
+    app: zom
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: zom
+  template:
+    metadata:
+      labels:
+        app: zom
+    spec:
+      volumes:
+        - name: vol-2
+          hostPath:
+            path: /root/mahesh
+      containers:
+        - name: cont-1
+          image: nginx
+          ports:
+            - containerPort: 80
+          command: ["tail", "-f", "/dev/null"]
+          volumeMounts:
+            - name: vol-2
+              mountPath: "/mahe"
+--------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------PV & PVC-------------------------------------------------------------------------
+-----------PV--------------------------
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pvol-1
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  awsElasticBlockStore:
+    volumeID: vol-0d9b3023be6d8fda1
+    fsType: ext4
+---------PVC--------------------
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mahe
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+--------Mounting---------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-3
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      env: dev
+  template:
+    metadata:
+      labels:
+        env: dev
+    spec:
+      volumes:
+        - name: mahesh
+          persistentVolumeClaim:
+            claimName: mahe
+      containers:
+        - name: cont
+          image: nginx
+          ports:
+            - containerPort: 80
+          command: ["tail", "-f", "/dev/null"]
+          volumeMounts:
+            - name: mahesh
+              mountPath: /maheshk
