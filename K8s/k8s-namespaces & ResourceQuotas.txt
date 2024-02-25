@@ -1,0 +1,65 @@
+ Command: kubectl get ns
+#Lists all namespaces in the Kubernetes cluster.
+#This command is used to retrieve a list of namespaces currently present in the Kubernetes cluster.
+
+ Command: kubectl create ns mahe
+#Creates a new namespace named "mahe".
+#This command creates a new namespace named "mahe" in the Kubernetes cluster.
+
+ Command: kubectl config set-context --current --ns=mahe
+#Sets the namespace for the current context to "mahe".
+#This command modifies the current context's namespace setting to "mahe", which means that subsequent commands will be executed within this namespace unless explicitly specified otherwise.
+
+ Command: kubectl config view --minify | grep -i "namespace"
+#Views the Kubernetes configuration and filters for the current namespace setting.
+#This command retrieves the Kubernetes configuration and extracts the namespace setting. The `--minify` flag reduces the output to essential information, and `grep -i "namespace"` filters for lines containing the word "namespace" (case-insensitive).
+
+ Command: kubectl run pod-1 --image=nginx -n=mahesh
+#Runs a new pod named "pod-1" with the NGINX image in the "mahesh" namespace.
+#This command creates a new pod named "pod-1" using the NGINX image within the "mahesh" namespace.
+
+ Command: kubectl get po -n=mahesh
+#Lists all pods in the "mahesh" namespace.
+#This command retrieves a list of pods present in the "mahesh" namespace.
+
+-----------------------------------------------------------------------------------------------------------------
+#Create ResourceQuota with yml file in a name space
+
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: rq-1
+  namespace: mahesh
+spec:
+  hard:
+    limits.cpu: "300m"
+    limits.memory: "500Mi"
+    requests.cpu: "250m"
+    requests.memory: "400Mi"
+
+#Create Pods with these ResourceQuotas
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  namespace: mahesh
+spec:
+  containers:
+    - name: cont-1
+      image: nginx
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "150Mi"
+        limits:
+          cpu: "120m"
+          memory: "170Mi"
+
+
+
+
