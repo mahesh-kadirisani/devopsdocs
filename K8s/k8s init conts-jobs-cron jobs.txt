@@ -1,0 +1,79 @@
+-----------------------------------INIT CONTAINER---------------------------------------------------------
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+  labels:
+    env: dev
+spec:
+  initContainers:
+    - name: cont-in
+      image: nginx
+      ports:
+        - containerPort: 80
+      command: ["/bin/bash", "-c", "echo Hi Mahesh > /mahesh/init; sleep 10"]
+      volumeMounts:
+        - name: vol-1
+          mountPath: /mahesh
+  containers:
+    - name: cont-main
+      image: nginx
+      ports:
+        - containerPort: 80
+      command: ["tail", "-f", "/dev/null"]
+      volumeMounts:
+        - name: vol-1
+          mountPath: /mahesh
+  volumes:
+    - name: vol-1
+      hostPath:
+         path: /vol
+
+---------------------------------------------JOBS------------------------------------------------------------
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-1
+  labels:
+    env: dev
+spec:
+  template:
+    metadata:
+      name: test-job
+    spec:
+      containers:
+        - name: cont-1
+          image: nginx
+          ports:
+            - containerPort: 80
+          command: ["/bin/bash", "-c", "sudo apt -update -y; sleep 40"]
+      restartPolicy: Never
+
+------------------------------------------CRON JOBS------------------------------------------------------------
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cjob
+  labels:
+    env: dev
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cjob-1
+              image: nginx
+              ports:
+                - containerPort: 80
+              command: ["/bin/bash", "-c"]
+              args:
+                - |
+                  sudo apt update -y
+                  touch mahes
+                  mkdir mahe
+          restartPolicy: Never
