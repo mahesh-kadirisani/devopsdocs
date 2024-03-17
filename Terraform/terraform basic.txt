@@ -1,0 +1,173 @@
+---------------first file------------------------------------------
+provider "aws" {
+  region = "us-east-1"
+}
+resource "aws_instance" "mahesh" {
+  tags = {
+    name = "inst-1"
+    env  = "dev"
+    app  = "qlik"
+  }
+  ami               = "ami-080e1f13689e07408"
+  instance_type     = "t2.micro"
+  availability_zone = "us-east-1b"
+  key_name          = "mahesh"
+  root_block_device {
+    volume_size = 10
+  }
+}
+----------------Second file (two instances at a time)----------------------------------------------
+provider "aws" {
+region = "us-east-1"
+}
+resource "aws_instance" "mahe-1" {
+tags = {
+name = "mahesh-1"
+env = "dev"
+}
+ami = "ami-080e1f13689e07408"
+key_name = "mahesh"
+instance_type = "t2.micro"
+availability_zone = "us-east-1b"
+root_block_device {
+volume_size = 10
+}
+}
+provider "aws" {
+region="us-east-1"
+alias = "mahe"
+}
+resource "aws_instance" "mahe-2"{
+tags = {
+name = "mahesh-2"
+env = "dev"
+}
+provider = "aws.mahe"
+ami = "ami-080e1f13689e07408"
+key_name = "mahesh"
+instance_type = "t2.micro"
+availability_zone = "us-east-1b"
+root_block_device {
+volume_size = 10
+}
+}
+-------------------------------------security group and attachment to instance--------------------------------------------------
+resource "aws_security_group" "sg1" {
+tags = {
+name = "sg-a"
+}
+ingress {
+from_port = "22"
+to_port = "22"
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+ingress {
+from_port = "0"
+to_port = "0"
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+ingress {
+from_port = "8080"
+to_port = "8080"
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+egress {
+from_port = "22"
+to_port = "22"
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+egress {
+from_port = "0"
+to_port = "0"
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+}
+-------------------attach---------------------------
+provider "aws" {
+region = "us-east-1"
+}
+resource "aws_instance" "one" {
+tags = {
+name = "in-1"
+env = "dev"
+}
+ami = "ami-080e1f13689e07408"
+key_name = "mahesh"
+instance_type = "t2.micro"
+vpc_security_group_ids = [aws_security_group.sg1.id]
+}
+--------------------------------Security group & Instance & Var tf files-----------------------------------------
+resource "aws_security_group" "sg2" {
+tags = {
+name = var.sgname
+}
+
+ingress {
+from_port = "22"
+to_port = "22"
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+ingress {
+from_port = "0"
+to_port = "0"
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+egress {
+from_port = "22"
+to_port = "22"
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+egress {
+from_port = "0"
+to_port = "0"
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+}
+
+&&&&&&&&&&&&&&&&&
+
+
+provider "aws" {
+region = var.region
+}
+resource "aws_instance" "in1" {
+tags = {
+name = var.iname
+env = var.env
+}
+ami = var.ami
+key_name = "mahesh"
+instance_type = var.itype
+vpc_security_group_ids = [aws_security_group.sg2.id]
+}
+
+
+&&&&&&&&&&&&&&&&&&&
+
+variable "sgname" {
+type = string
+}
+variable "region" {
+type = string
+}
+variable "iname" {
+type = string
+}
+variable "env" {
+type = string
+}
+variable "ami" {
+type = string
+}
+variable "itype" {
+type = string
+}
