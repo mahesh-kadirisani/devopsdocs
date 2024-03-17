@@ -1,0 +1,75 @@
+pipeline{
+    agent any
+    tools{
+        jdk 'jdk17'
+        nodejs 'node16'
+    }
+    environment{
+        SCANNER_HOME=tool 'mysonar'
+    }
+    stages{
+        stage("Clean"){
+            steps{
+                cleanWs()
+            }
+        }
+        stage("code"){
+            steps{
+                git "https://github.com/mahesh-kadirisani/k8s-project.git"
+            }
+        }
+        stage ("CQA") {
+            steps{
+                withSonarQubeEnv('mysonar') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=zomato \
+                    -Dsonar.projectKey=zomato '''
+                }
+            }
+        }
+        stage("Qualitygates"){
+            steps{
+                script{
+                    waitForQualityGate abortPipeline: false, credentialsId: 'mysonar'
+                }
+            }
+        }
+        stage("installdeps"){
+            steps{
+                sh 'npm install'
+            }
+        }
+        stage("OWASP"){
+            steps{
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'Dp-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage("trivy"){
+            steps{
+                sh 'trivy fs . > trivyfs.txt'
+            }
+        }
+        stage('dbuild'){
+            steps{
+                sh 'docker build -t maheshkadirisani/projects:game .'
+            }
+        }
+        stage('dpush'){
+            steps{
+                withDockerRegistry(url: 'https://index.docker.io/v1/', credentialsId: 'dockercr'){
+                    sh 'docker push maheshkadirisani/projects:game'
+                }
+            }
+        }
+        stage('imagescan'){
+            steps{
+                sh 'trivy image maheshkadirisani/projects:game'
+            }
+        }
+        stage('deploy'){
+            steps{
+                sh 'docker run -d --name game -p 3000:3000 maheshkadirisani/projects:game'
+            }
+        }
+    }
+}

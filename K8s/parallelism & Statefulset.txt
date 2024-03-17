@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-container
+        image: nginx
+        ports:
+        - containerPort: 80
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 2
+    type: RollingUpdate
+
+In Kubernetes Deployments, there are two different types of strategies available: RollingUpdate and Recreate.
+
+RollingUpdate: This is the default strategy. It updates the pods gradually in a rolling fashion, 
+ensuring that at least a certain number (maxUnavailable) of pods are available during the update process. 
+It also allows a certain number of additional pods (maxSurge) to be created beyond the desired number of pods, 
+facilitating parallelism during updates.
+
+Recreate: This strategy terminates all existing pods before creating new ones. 
+It's a simpler strategy compared to RollingUpdate, but it may cause downtime during updates since all pods are terminated before the new ones are created. 
+This strategy is useful in cases where downtime is acceptable or where parallelism is not a concern.
+
+
+
+
+-------------------------------------STATEFULL-------------------------------------------------------
+clone git repository
+https://github.com/devops0014/k8s-stateful-set-application/tree/master
