@@ -1,0 +1,88 @@
+----------1----------------------
+---
+- hosts: dev
+  user: ubuntu
+  become: yes
+  connection: ssh
+  tasks:
+    - name: installing git
+      action: apt name=git state=present
+
+----------2----------------------
+---
+- hosts: dev
+  user: ubuntu
+  become: yes
+  connection: ssh
+  tasks:
+    - name: installing java1.8.0
+      apt:
+        name: openjdk-8-jdk
+        state: present
+
+----------3----------------------
+---
+- hosts: uat
+  user: ubuntu
+  become: yes
+  connection: ssh
+  tasks:
+    - name: installing apache2
+      apt:
+        name: apache2
+        state: present
+    - name: starting apache2
+      service:
+        name: apache2
+        state: started
+
+----------4----------------------
+---
+- hosts: dev
+  user: ubuntu
+  become: yes
+  connection: ssh
+  tasks:
+    - name: creating files
+      file:
+        path: /home/ubuntu/dev.txt
+        state: touch
+    - name: insert content
+      lineinfile:
+        path: /home/ubuntu/dev.txt
+        line: "{{ lookup('pipe', 'ps -ef') }}"
+
+----------5----------------------
+---
+- hosts: dev
+  user: ubuntu
+  become: no
+  connection: ssh
+  tasks:
+    - name: giving that dev,txt file write access to ubuntu user
+      shell: sudo chmod 707 /home/ubuntu/dev.txt
+    - name: Execute ps -ef | grep -i amazon and save output to file
+      shell: ps -ef | grep -i amazon > /home/ubuntu/dev.txt
+
+----------6----------------------
+---
+- hosts: uat
+  become: no
+  tasks:
+    - name: creating files with vars
+      shell: touch '{{mahe}}'.txt
+
+<<<<  ansible-playbook -i hostfile pb6.yml -e "mahe=file"   >>>>>
+
+----------7----------------------
+
+---
+- hosts: uat
+  become: no
+  vars:
+    mahe: file
+  tasks:
+    - name: creating files with vars
+      shell: touch '{{mahe}}'.txt
+
+<<<<  ansible-playbook -i hostfile pb6.yml   >>>>>

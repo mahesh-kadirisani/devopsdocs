@@ -1,0 +1,27 @@
+provider "aws" {
+region = "us-east-1"
+}
+
+resource "aws_s3_bucket" "mahek8s" {
+bucket = "mahek8s"
+}
+
+resource "aws_s3_bucket_ownership_controls" "boc" {
+bucket = aws_s3_bucket.mahek8s.id
+rule {
+object_ownership = "BucketOwnerPreferred"
+}
+}
+
+resource "aws_s3_bucket_acl" "acl" {
+bucket = aws_s3_bucket.mahek8s.id
+depends_on = [aws_s3_bucket_ownership_controls.boc]
+acl = "private"
+}
+
+resource "aws_s3_bucket_versioning" "ver" {
+bucket = aws_s3_bucket.mahek8s.id
+versioning_configuration{
+status="Enabled"
+}
+}

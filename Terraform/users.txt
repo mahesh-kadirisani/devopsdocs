@@ -1,0 +1,49 @@
+provider "aws"{
+region = "us-east-1"
+}
+resource "aws_iam_user" "users" {
+name = "maheshk"
+}
+resource "aws_iam_access_key" "access_key"{
+user = aws_iam_user.users.name
+}
+output "access_key" {
+sensitive = true
+value = {
+acces_key = aws_iam_access_key.access_key.id
+secret_key = aws_iam_access_key.access_key.secret
+}
+}
+-----------------------------------------------------------------------
+resource "aws_iam_user" "users" {
+name = var.username[count.index]
+count= length (var.username)
+}
+
+variable "username" {
+type = list (string)
+}
+----------------------------------------------------------------------
+provider "aws" {
+  region = "us-east-1"
+}
+
+variable "name" {
+  type    = list(string)
+  default = ["maheg", "mahesk"]
+}
+
+resource "aws_iam_user" "user" {
+  count = length(var.name)
+  name  = var.name[count.index]
+}
+
+resource "aws_iam_access_key" "key" {
+  count = length(var.name)
+
+  user = aws_iam_user.user[count.index].name
+}
+
+output "access_key" {
+value = aws_iam_access_key.key[*].id
+}

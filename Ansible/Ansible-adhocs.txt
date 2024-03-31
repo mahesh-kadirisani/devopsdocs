@@ -1,0 +1,4 @@
+ansible -i hostfile uat -m "shell" -a "echo 'Hi' > first.txt"
+
+ansible -i hostfile dev -m "shell" -a "sudo apt install tree -y"
+

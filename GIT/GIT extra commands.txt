@@ -1,0 +1,1 @@
+git log origin/master..master  ----> This command will show you the commits on your local branch that aren't on the remote branch.
