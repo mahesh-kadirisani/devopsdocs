@@ -1,0 +1,41 @@
+How to import CFT configuration to Terraform 
+
+
+Step -1
+---------
+------main.tf-----------
+
+provider "aws" {
+region = "us-east-1"
+}
+
+import {
+id = "i-07b2bb8569c3f421c"
+to = aws_instance.in-1
+}
+
+Step -2
+---------
+
+Run terraform plan -generate-config-out=resource.tf
+>>This will create a tf file with all the configuration
+
+Step-3
+---------
+Copy all these configuration to main.tf file
+we dont need import block now
+and remove ipv6 configuration
+
+ipv6_address_count = 0
+  ipv6_addresses   = []
+------main.tf-----------
+
+Step -4
+-----------
+Comment out or delete the resource.tf file
+
+Step-5
+----------
+Then Run terraform import aws_instance.in-1 i-07........ (instance_id)
+
+

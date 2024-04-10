@@ -1,6 +1,17 @@
+-----Amazon-Linux------------------------------
 amazon-linux-extras install java-openjdk11 -y
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 yum install jenkins -y
 systemctl start jenkins
 yum install git java-1.8.0-openjdk maven -y
+
+-----Ubuntu------------------------------
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl start jenkins
+sudo apt install git openjdk-8-jdk maven -y

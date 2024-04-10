@@ -1,0 +1,7 @@
+output "instance_details" {
+  value = {
+    instance_id    = aws_instance.instance.id
+    Security_group = aws_security_group.sg.id
+    instance_type  = var.instance_type
+  }
+}

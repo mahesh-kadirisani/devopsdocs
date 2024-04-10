@@ -1,0 +1,5 @@
+ami           = "ami-080e1f13689e07408"
+instance_type = "t2.micro"
+instance_name = "IN-1"
+cidr          = "10.0.0.0/16"
+env           = "dev"
