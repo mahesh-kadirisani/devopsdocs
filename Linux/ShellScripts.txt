@@ -49,6 +49,41 @@ for i in {1..200}; do
                 echo $i
         fi;
 done
+----------7-----------------------------------
+
+#!/bin/bash
+
+# Initialize a counter variable
+count=0
+
+# Loop through numbers from 1 to 100
+for i in {1..100}; do
+    # Check if the number is divisible by 3 or 5, but not by 15
+    if [ $(expr $i % 3) -eq 0 ] || [ $(expr $i % 5) -eq 0 ] && [ $(expr $i % 15) -ne 0 ]; then
+        # Increment the counter
+        ((count++))
+        # Output the number (optional)
+        echo $i
+    fi
+done
+
+# Output the total count of numbers meeting the condition
+echo "Total count: $count"
+
+
+or---------
+
+#!/bin/bash
+count = 0
+for i in {1..100}; do
+        if [ $(($i % 3)) -eq 0 ] || [ $(($i % 5)) -eq 0 ] && [ $(($i % 15)) -ne 0 ]; then
+                ((count++))
+                echo $i
+        fi;
+done
+
+echo $count
+~
 
 
 

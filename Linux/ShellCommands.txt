@@ -1,0 +1,3 @@
+-------To-get-info-of-Instances------------------------------------------------
+
+aws ec2 describe-instances | jq '.Reservations[].Instances[] | "\(.InstanceId), \(.InstanceType)"'
