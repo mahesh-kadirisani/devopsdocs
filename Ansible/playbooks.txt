@@ -1,3 +1,5 @@
+<<<<  ansible-playbook -i hostfile pb6.yml  >>>>>
+
 ----------1----------------------
 ---
 - hosts: dev

@@ -1,0 +1,13 @@
+docker run -itd --name cycle -p 1235:80 shaikmustafa/cycle  -----> to create a container
+docker ps -a "state=exited"                                 -----> to get exited containers
+/usr/local/apache2/htdocs                                   -----> default path of index.html
+docker rm $(docker ps -a -q)                                -----> to kill running containers
+docker rm $(docker ps -a -q)                                -----> to remove all containers
+docker rmi $(docker images -q)                              -----> to remove images
+docker rename cont1 cont2                                   -----> to rename a container
+docker inspect cont1                                        -----> to get the details of container
+docker exec -it cont1 bash                                  -----> to enter into container
+docker exec cont1 mkdir devops                              -----> to perform a command inside a container
+docker commit cont1 image1                                  -----> to create image from container
+docker build -t im-1 -f dockerf .                           -----> to build image using desired file name (Default Docker file name is Dockerfile)
+
