@@ -10,4 +10,27 @@ docker exec -it cont1 bash                                  -----> to enter into
 docker exec cont1 mkdir devops                              -----> to perform a command inside a container
 docker commit cont1 image1                                  -----> to create image from container
 docker build -t im-1 -f dockerf .                           -----> to build image using desired file name (Default Docker file name is Dockerfile)
+docker build -t maheshkadirisani/ngi:latest .               -----> to build images for dockerhub
+docker push maheshkadirisani/ngi:latest                     -----> to push image to dockerhub
+docker network create private-network                       -----> to create a bridge network
+docker network ls                                           -----> to get list of networks
+docker run -itd --name login --network=private-network 
+-p 1236:80 maheshkadirisani/ngi                             -----> to create a container with specified network
+docker run -itd --name login --network=host 
+-p 1236:80 maheshkadirisani/ngi                             -----> to create a container with host network
+apt-get install iputils-ping -y (after apt update -y)       -----> to install ping inside a container 
+ping 172.19.3.4 (container ip)                              -----> to check connection
+docker system df -v                                         -----> to get all the details about conts , volumes, images and networks
 
+---------------------------------------------Volumes-------------------------------------------------------------------
+ docker volume create vol1                                   ------> to create a volume
+docker run -itd --name cycle -p 1235:80 
+--mount source=vol1 target=/app shaikmustafa/cycle          ------> to mount a volume
+
+
+--------------------------------------to mount a volume that's attached to EBS------------------------------------------
+1. Create an EBS from AWS console 
+2. Attach it to an EC2 instance
+3. Format the disk                                           -----> mkfs -t ext4 /dev/xvdX  (X will varry . ex: bb,bc,bd...)
+4. lsblk                                                     -----> to check if volume is attached , and where its attached
+5. mount /dev/xvdX /var/lib/docker/volumes                   -----> to mount the ebs to the default volumes path
