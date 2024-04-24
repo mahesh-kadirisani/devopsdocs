@@ -1,4 +1,7 @@
 kubectl run pod-1 --image=nginx -----> to create a pod
 kubectl decribe pod pod-1       -----> to decribe a pod
 kubectl get po                  -----> to get the pods
+kubectl get po -o wide          -----> to get the pods with additional details
 kubectl api-resources           -----> to get all api resources
+kubectl create -f mahe.yml      -----> to execute a yml file
+kubectl apply -f mahe.yml       -----> to update the changes done in yml file 
