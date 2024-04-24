@@ -1,0 +1,4 @@
+kubectl run pod-1 --image=nginx -----> to create a pod
+kubectl decribe pod pod-1       -----> to decribe a pod
+kubectl get po                  -----> to get the pods
+kubectl api-resources           -----> to get all api resources
