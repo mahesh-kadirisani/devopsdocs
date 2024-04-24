@@ -3,7 +3,7 @@ Ubuntu:
 
 #!/bin/bash
 
-apt update -y
+sudo apt update -y
 sudo apt install curl wget apt-transport-https -y
 sudo curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
