@@ -1,4 +1,5 @@
-!/bin/bash
+----------------------amazon-linux----------------------------------------
+#!/bin/bash
 
 # Download AWS CLI version 2
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -41,4 +42,24 @@ sudo mv kops-linux-amd64  /usr/local/bin/kops
 #kubectl version && kops version
 
 # Source .bashrc to apply changes to the current shell session
+source ~/.bashrc
+
+----------------------Ubuntu - linux----------------------------------------
+
+sudo apt update && sudo apt install -y curl unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+/usr/local/bin/aws --version
+export export_line='export PATH=$PATH:/usr/local/bin'
+echo "$export_line" >> ~/.bashrc
+source ~/.bashrc
+aws --version
+sudo apt update && sudo apt install -y curl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+wget https://github.com/kubernetes/kops/releases/download/v1.24.1/kops-linux-amd64
+chmod +x kubectl kops-linux-amd64
+sudo mv kubectl /usr/local/bin/kubectl
+sudo mv kops-linux-amd64 /usr/local/bin/kops
+kubectl version && kops version
 source ~/.bashrc
