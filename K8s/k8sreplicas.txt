@@ -40,3 +40,31 @@ spec:
           image: nginx
           ports:
             - containerPort: 80
+
+----------------------Deployment--------------------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 3  
+  minReadySeconds: 30  # Minimum number of seconds for pods to be ready during rolling update
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1  # Maximum number of pods that can be created over the desired number of pods during update
+      maxUnavailable: 1  # Maximum number of pods that can be unavailable during update
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
