@@ -88,3 +88,43 @@
       shell: touch '{{mahe}}'.txt
 
 <<<<  ansible-playbook -i hostfile pb6.yml   >>>>>
+
+----------7----------------------
+
+---
+- hosts: uat
+  user: ubuntu
+  become: yes
+  connection: ssh
+
+  tasks:
+    - name: updating cache
+      apt:
+        update_cache: true
+
+    - name: installing unzip and curl
+      apt:
+        name:
+          - unzip
+          - curl
+        state: present
+
+    - name: downloading awscli package
+      get_url:
+        url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        dest: "/home/ubuntu/awscli.zip"
+
+    - name: unzipping package
+      unarchive:
+        src: "/home/ubuntu/awscli.zip"
+        dest: "/home/ubuntu"
+        remote_src: yes
+
+    - name: installing awscli
+      command: "/home/ubuntu/aws/install"
+
+    - name: installing docker
+      snap:
+        name: docker
+        state: present
+
